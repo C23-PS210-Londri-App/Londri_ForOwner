@@ -10,6 +10,7 @@
     <string name="daftar_sekarang">Daftar sekarang!</string>
     <string name="edit_no">Nomor Telephone</string>
     <string name="edit_nama">Nama Binatu</string>
+    <string name="nama">Nama</string>
     <string name="step1">Step 1 of 3</string>
     <string name="step2">Step 2 of 3</string>
     <string name="step3">Step 3 of 3</string>
@@ -27,24 +28,19 @@
     <string name="title_history">History</string>
     <string name="title_profile">Akun</string>
     <string name="repeatPassword">Ulangi kata sandi</string>
-    <string name="title_activity_register_lokasi">RegisterLokasiActivity</string>
     <string name="camera_option">Camera Option</string>
     <string name="gallery_option">Gallery Option</string>
     <string name="gallery">Galeri</string>
     <string name="tambahkan_gambar">Tambahkan Gambar</string>
-    <string name="title_activity_home_page">HomePageActivity</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
-    <string name="title_activity_home">HomeActivity</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="idPesanan">OD-000000</string>
     <string name="beratPesanan">4 Kg</string>
     <string name="estimasiBiaya">Rp 40.000</string>
     <string name="slice">|</string>
     <string name="time">17.00</string>
     <string name="date">18-11-2023</string>
+    <string name="orderDetail">Detail Pesanan</string>
     <string name="catatan">Catatan</string>
     <string name="orderStatus">Pesanan Selesai</string>
     <string name="cuci">Cuci</string>
@@ -52,4 +48,13 @@
     <string name="layanan">Layanan</string>
     <string name="finishOrder">7 Pesanan diselesaikan</string>
     <string name="orderTotalFinish">Total Pendapatan : 200.000</string>
+    <string name="waktu_dipesan">Waktu Dipesan</string>
+    <string name="order_date">Tanggal dipesan</string>
+    <string name="nomor_order">Nomor Order</string>
+    <string name="jumlah_pesanan">Jumlah Pesanan</string>
+    <string name="estimasi_biaya">Estimasi biaya</string>
+    <string name="note">Tolong pisah baju warna putih</string>
+    <string name="title_activity_register_lokasi">Location</string>
+    <string name="title_activity_home">homes</string>
+    <string name="EmptyMessage">Anda belum memiliki pesanan</string>
 </resources>
