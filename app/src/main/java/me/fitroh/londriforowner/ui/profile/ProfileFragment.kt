@@ -35,18 +35,18 @@ class ProfileFragment : Fragment() {
             }
         }
 
-        viewModel.profileResponse.observe(viewLifecycleOwner) { profile->
+        viewModel.profileResponse.observe(viewLifecycleOwner) { profile ->
             Log.d("Debug:", "${profile}")
 
             binding.apply {
-                tvName.text = profile.namaLaundry
+                tvName.text = profile.response?.namaLaundry
                 Log.d("Debug:", "${profile}")
-                tvEmail.text = profile.email
-                tvTelepon.text = profile.nomorTelepon
-                tvAddress.text = profile.alamat
+                tvEmail.text = profile.response?.email
+                tvTelepon.text = profile.response?.nomorTelepon
+                tvAddress.text = profile.response?.alamat
                 Glide
                     .with(this@ProfileFragment)
-                    .load(profile.fotoLaundry)
+                    .load(profile.response?.fotoLaundry)
                     .centerCrop()
                     .into(ivProfile)
             }

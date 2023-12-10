@@ -1,10 +1,9 @@
 package me.fitroh.londriforowner.data.api
 
-import android.telecom.Call
 import me.fitroh.londriforowner.data.response.LoginResponse
 import me.fitroh.londriforowner.data.response.ProfileResponse
 import me.fitroh.londriforowner.data.response.RegisterResponse
-import me.fitroh.londriforowner.data.response.Response
+import me.fitroh.londriforowner.data.response.ProfileResult
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
@@ -29,5 +28,5 @@ interface ApiService {
     ): LoginResponse
 
     @GET("admin/profile")
-    suspend fun getProfile(@Header("Authorization") token: String): Response
+    suspend fun getProfile(@Header("Authorization") token: String): ProfileResponse
 }

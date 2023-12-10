@@ -1,14 +1,17 @@
 package me.fitroh.londriforowner.utils
 
+import android.provider.ContactsContract.Profile
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.withContext
 import me.fitroh.londriforowner.data.api.ApiService
 import me.fitroh.londriforowner.data.response.LoginResponse
 import me.fitroh.londriforowner.data.response.ProfileResponse
-import me.fitroh.londriforowner.data.response.Response
+import me.fitroh.londriforowner.data.response.ProfileResult
 import me.fitroh.londriforowner.models.UserModel
 import me.fitroh.londriforowner.pref.UserPreference
 import retrofit2.HttpException
@@ -20,8 +23,8 @@ class UserRepository private constructor(
     private val _loginResponse = MutableLiveData<LoginResponse>()
     val loginResponse: LiveData<LoginResponse> = _loginResponse
 
-    private val _profileResponse = MutableLiveData<Response>()
-    val profileResponse: LiveData<Response> = _profileResponse
+    private val _profileResponse = MutableLiveData<ProfileResponse>()
+    val profileResponse: LiveData<ProfileResponse> = _profileResponse
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -58,13 +61,15 @@ class UserRepository private constructor(
 
     suspend fun getProfile(token: String) {
         try {
-            val successResponse = apiService.getProfile(token)
-            _profileResponse.value = successResponse
-            Log.d("DebugToken:", token)
-            Log.d("Debug::", "$successResponse")
+            withContext(Dispatchers.IO) {
+                val successResponse = apiService.getProfile(token)
+                _profileResponse.postValue(successResponse)
+                Log.d("DebugToken:", token)
+                Log.d("Debug::", "$successResponse")
+            }
         } catch (e: Exception) {
             val errorBody = e.message
-            val errorResponseObject = Gson().fromJson(errorBody, Response::class.java)
+            val errorResponseObject = Gson().fromJson(errorBody, ProfileResponse::class.java)
             Log.e("Error", errorResponseObject.toString())
             _profileResponse.value = errorResponseObject
         }

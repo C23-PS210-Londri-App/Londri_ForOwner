@@ -5,53 +5,53 @@ import com.google.gson.annotations.SerializedName
 data class ProfileResponse(
 
 	@field:SerializedName("response")
-	val response: Response? = null,
+	val response: ProfileResult?,
 
 	@field:SerializedName("error")
-	val error: Boolean? = null,
+	val error: Boolean?,
 
 	@field:SerializedName("message")
-	val message: String? = null
+	val message: String?
 )
 
-data class Response(
+data class ProfileResult(
 
 	@field:SerializedName("fotoLaundry")
-	val fotoLaundry: String? = null,
+	val fotoLaundry: String?,
 
 	@field:SerializedName("namaLaundry")
-	val namaLaundry: String? = null,
+	val namaLaundry: String?,
 
 	@field:SerializedName("latitude")
-	val latitude: String? = null,
+	val latitude: String?,
 
 	@field:SerializedName("nomorTelepon")
-	val nomorTelepon: String? = null,
+	val nomorTelepon: String?,
 
 	@field:SerializedName("alamat")
-	val alamat: String? = null,
+	val alamat: String?,
 
 	@field:SerializedName("createdAt")
-	val createdAt: String? = null,
+	val createdAt: String?,
 
 	@field:SerializedName("passwordToken")
-	val passwordToken: Any? = null,
+	val passwordToken: Any?,
 
 	@field:SerializedName("id")
-	val id: Int? = null,
+	val id: Int?,
 
 	@field:SerializedName("namaLengkap")
-	val namaLengkap: Any? = null,
+	val namaLengkap: Any?,
 
 	@field:SerializedName("email")
-	val email: String? = null,
+	val email: String?,
 
 	@field:SerializedName("longitude")
-	val longitude: String? = null,
+	val longitude: String?,
 
 	@field:SerializedName("status")
-	val status: String? = null,
+	val status: String?,
 
 	@field:SerializedName("updatedAt")
-	val updatedAt: String? = null
+	val updatedAt: String?
 )
