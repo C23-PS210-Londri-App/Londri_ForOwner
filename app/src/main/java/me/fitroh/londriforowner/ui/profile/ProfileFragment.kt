@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import me.fitroh.londriforowner.databinding.FragmentProfileBinding
 import me.fitroh.londriforowner.models.ViewModelFactory
@@ -36,11 +35,10 @@ class ProfileFragment : Fragment() {
         }
 
         viewModel.profileResponse.observe(viewLifecycleOwner) { profile ->
-            Log.d("Debug:", "${profile}")
 
             binding.apply {
                 tvName.text = profile.response?.namaLaundry
-                Log.d("Debug:", "${profile}")
+                Log.d("Debug:", "$profile")
                 tvEmail.text = profile.response?.email
                 tvTelepon.text = profile.response?.nomorTelepon
                 tvAddress.text = profile.response?.alamat

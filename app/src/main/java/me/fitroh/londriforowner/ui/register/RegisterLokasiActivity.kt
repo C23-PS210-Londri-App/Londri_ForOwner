@@ -30,6 +30,7 @@ class RegisterLokasiActivity : AppCompatActivity(), OnMapReadyCallback,
     private lateinit var binding: ActivityRegisterLokasiBinding
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
+    private var doubleBackToExit = false
     private var selectedLocation : LatLng? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,6 +40,10 @@ class RegisterLokasiActivity : AppCompatActivity(), OnMapReadyCallback,
         setContentView(binding.root)
 
         supportActionBar?.hide()
+        val keyEmail = intent.getStringExtra("email")
+        val keyTelp = intent.getStringExtra("telephone")
+        val keyPassword = intent.getStringExtra("password")
+        val keyRepeatPassword = intent.getStringExtra("repeatPass")
 
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
@@ -49,13 +54,34 @@ class RegisterLokasiActivity : AppCompatActivity(), OnMapReadyCallback,
         binding.apply {
             btnPrev.setOnClickListener {
                 val intent = Intent(this@RegisterLokasiActivity, RegisterActivity::class.java)
+                intent.putExtra("email", keyEmail)
+                intent.putExtra("telephone", keyTelp)
+                intent.putExtra("password", keyPassword)
+                intent.putExtra("repeatPass", keyRepeatPassword)
                 startActivity(intent)
+                finish()
             }
             btnNext.setOnClickListener {
                 val intent = Intent(this@RegisterLokasiActivity, RegisterThreeActivity::class.java)
                 startActivity(intent)
+                finish()
             }
         }
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onBackPressed() {
+        if (doubleBackToExit) {
+            super.onBackPressed()
+            return
+        }
+        this.doubleBackToExit = true
+        Toast.makeText(this, "Tekan sekali lagi untuk keluar", Toast.LENGTH_SHORT).show()
+
+        android.os.Handler().postDelayed(
+            { doubleBackToExit = false },
+            2000
+        )
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
