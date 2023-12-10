@@ -1,13 +1,16 @@
 package me.fitroh.londriforowner.ui.home
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
+import me.fitroh.londriforowner.models.UserModel
+import me.fitroh.londriforowner.utils.UserRepository
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel(private val repository: UserRepository) : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is home Fragment"
+    val isLoading: LiveData<Boolean> = repository.isLoading
+
+    fun getSession(): LiveData<UserModel> {
+        return repository.getSession().asLiveData()
     }
-    val text: LiveData<String> = _text
 }

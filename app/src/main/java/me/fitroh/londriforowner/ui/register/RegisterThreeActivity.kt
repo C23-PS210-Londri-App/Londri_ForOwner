@@ -4,19 +4,29 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import me.fitroh.londriforowner.R
 import me.fitroh.londriforowner.databinding.ActivityRegisterThreeBinding
 import me.fitroh.londriforowner.ui.HomeActivity
+import me.fitroh.londriforowner.utils.getImageUri
 
 class RegisterThreeActivity : AppCompatActivity() {
-    private lateinit var binding : ActivityRegisterThreeBinding
+    private lateinit var binding: ActivityRegisterThreeBinding
+    private var currentImageUri: Uri? = null
+    private var token: String? = null
+
+    companion object {
+        private const val REQUIRED_PERMISSION = Manifest.permission.CAMERA
+    }
 
     private val requestPermissionLauncher =
         registerForActivityResult(
@@ -28,6 +38,12 @@ class RegisterThreeActivity : AppCompatActivity() {
                 Toast.makeText(this, "Permission request denied", Toast.LENGTH_LONG).show()
             }
         }
+
+    private fun allPermissionGranted() = ContextCompat.checkSelfPermission(
+        this, REQUIRED_PERMISSION
+    ) == PackageManager.PERMISSION_GRANTED
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRegisterThreeBinding.inflate(layoutInflater)
@@ -35,8 +51,12 @@ class RegisterThreeActivity : AppCompatActivity() {
 
         supportActionBar?.hide()
 
-        binding.imageStory.setOnClickListener{
+        binding.imageStory.setOnClickListener {
             showOptionImage()
+        }
+
+        if (!allPermissionGranted()) {
+            requestPermissionLauncher.launch(REQUIRED_PERMISSION)
         }
 
         binding.apply {
@@ -51,13 +71,6 @@ class RegisterThreeActivity : AppCompatActivity() {
         }
     }
 
-    private fun allPermissionsGranted(): Boolean {
-        return ContextCompat.checkSelfPermission(
-            this,
-            REQUIRED_PERMISSION
-        ) == PackageManager.PERMISSION_GRANTED
-    }
-
     @SuppressLint("InflateParams")
     private fun showOptionImage() {
         val builder = AlertDialog.Builder(this)
@@ -69,31 +82,51 @@ class RegisterThreeActivity : AppCompatActivity() {
         dialog.show()
 
         val cameraOption = view.findViewById<ImageView>(R.id.cameraOption)
-        cameraOption.setOnClickListener{
-            if (!allPermissionsGranted()){
-                requestPermissionLauncher.launch(REQUIRED_PERMISSION)
-            }
+        cameraOption.setOnClickListener {
             startCamera()
+            dialog.dismiss()
         }
 
         val galleryOption = view.findViewById<ImageView>(R.id.galleryOption)
-        galleryOption.setOnClickListener{
-            if (!allPermissionsGranted()){
-                requestPermissionLauncher.launch(REQUIRED_PERMISSION)
-            }
+        galleryOption.setOnClickListener {
             startGallery()
+            dialog.dismiss()
         }
     }
 
     private fun startGallery() {
-        Toast.makeText(this, "Start Gallery", Toast.LENGTH_SHORT).show()
+        launcherGallery.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+    }
+
+    private var launcherGallery = registerForActivityResult(
+        ActivityResultContracts.PickVisualMedia()
+    ) { uri: Uri? ->
+        if (uri != null) {
+            currentImageUri = uri
+            showImage()
+        } else {
+            Log.d("Photo Picker :", "Tidak ada gambar yang dipilih")
+        }
+
+    }
+
+    private fun showImage() {
+        currentImageUri?.let {
+            Log.d("Image URI", "showImage: $it")
+            binding.imageStory.setImageURI(it)
+        }
     }
 
     private fun startCamera() {
-        Toast.makeText(this, "Start Camera", Toast.LENGTH_SHORT).show()
+        currentImageUri = getImageUri(this)
+        launcherIntentCamera.launch(currentImageUri)
     }
 
-    companion object {
-        private const val REQUIRED_PERMISSION = Manifest.permission.CAMERA
+    private val launcherIntentCamera = registerForActivityResult(
+        ActivityResultContracts.TakePicture()
+    ) { isSuccess ->
+        if (isSuccess) {
+            showImage()
+        }
     }
 }

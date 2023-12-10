@@ -27,12 +27,6 @@ class HistoryFragment : Fragment() {
 
         _binding = FragmentHistoryBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
-
-        val textView: TextView = binding.tvEmpty
-        historyViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
         return root
     }
 

@@ -20,10 +20,7 @@ class HomeActivity : AppCompatActivity() {
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        supportActionBar?.apply {
-            title = "Londri"
-            setDisplayHomeAsUpEnabled(true)
-        }
+        supportActionBar?.hide()
 
         val navView: BottomNavigationView = binding.navView
 
