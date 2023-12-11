@@ -8,6 +8,7 @@ import android.location.Geocoder
 import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -22,12 +23,14 @@ import me.fitroh.londriforowner.R
 import me.fitroh.londriforowner.databinding.ActivityRegisterLokasiBinding
 import java.util.Locale
 
+@Suppress("DEPRECATION")
 class RegisterLokasiActivity : AppCompatActivity(), OnMapReadyCallback,
     GoogleMap.OnMapClickListener {
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityRegisterLokasiBinding
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var bundle : Bundle
 
     private var doubleBackToExit = false
     private var selectedLocation : LatLng? = null
@@ -40,6 +43,7 @@ class RegisterLokasiActivity : AppCompatActivity(), OnMapReadyCallback,
         binding.btnNext.isEnabled = false
 
         supportActionBar?.hide()
+        val keyName = intent.getStringExtra("name")
         val keyEmail = intent.getStringExtra("email")
         val keyTelp = intent.getStringExtra("telephone")
         val keyPassword = intent.getStringExtra("password")
@@ -54,6 +58,7 @@ class RegisterLokasiActivity : AppCompatActivity(), OnMapReadyCallback,
         binding.apply {
             btnPrev.setOnClickListener {
                 val intent = Intent(this@RegisterLokasiActivity, RegisterActivity::class.java)
+                intent.putExtra("name", keyName)
                 intent.putExtra("email", keyEmail)
                 intent.putExtra("telephone", keyTelp)
                 intent.putExtra("password", keyPassword)
@@ -62,7 +67,13 @@ class RegisterLokasiActivity : AppCompatActivity(), OnMapReadyCallback,
                 finish()
             }
             btnNext.setOnClickListener {
+                showLoading(true)
                 val intent = Intent(this@RegisterLokasiActivity, RegisterThreeActivity::class.java)
+                intent.putExtra("telephone", keyTelp)
+                intent.putExtra("name", keyName)
+                intent.putExtra("email", keyEmail)
+                intent.putExtra("password", keyPassword)
+                intent.putExtras(bundle)
                 startActivity(intent)
                 finish()
             }
@@ -166,6 +177,13 @@ class RegisterLokasiActivity : AppCompatActivity(), OnMapReadyCallback,
         val geocode = Geocoder(context, Locale.getDefault())
         val listAddress = geocode.getFromLocation(lat, long, 1)
         val currentAddress = listAddress?.get(0)?.getAddressLine(0)
+        currentAddress ?: "Cannot access your address"
+
+        bundle = Bundle()
+        bundle.putString("latitude", lat.toString())
+        bundle.putString("longitude", long.toString())
+        bundle.putString("currentAddress", currentAddress.toString())
+
         binding.btnNext.isEnabled = true
 
         return currentAddress ?: "Cannot access your address"
@@ -183,5 +201,9 @@ class RegisterLokasiActivity : AppCompatActivity(), OnMapReadyCallback,
         } ?: "Cannot access the address for the selected location"
 
         binding.tvAddress.text = currentAddress
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 }

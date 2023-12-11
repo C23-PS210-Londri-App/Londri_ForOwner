@@ -7,6 +7,7 @@ import me.fitroh.londriforowner.di.Injection
 import me.fitroh.londriforowner.ui.home.HomeViewModel
 import me.fitroh.londriforowner.ui.login.LoginViewModel
 import me.fitroh.londriforowner.ui.profile.ProfileViewModel
+import me.fitroh.londriforowner.ui.register.RegisterViewModel
 import me.fitroh.londriforowner.utils.UserRepository
 
 class ViewModelFactory(private val repository: UserRepository) :
@@ -22,6 +23,9 @@ class ViewModelFactory(private val repository: UserRepository) :
             }
             modelClass.isAssignableFrom(ProfileViewModel::class.java) -> {
                 ProfileViewModel(repository) as T
+            }
+            modelClass.isAssignableFrom(RegisterViewModel::class.java) -> {
+                RegisterViewModel(repository) as T
             }
             else -> throw IllegalArgumentException("Unknown viewModel class : " + modelClass.name)
         }

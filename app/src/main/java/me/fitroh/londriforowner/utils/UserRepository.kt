@@ -1,6 +1,5 @@
 package me.fitroh.londriforowner.utils
 
-import android.provider.ContactsContract.Profile
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -11,7 +10,7 @@ import kotlinx.coroutines.withContext
 import me.fitroh.londriforowner.data.api.ApiService
 import me.fitroh.londriforowner.data.response.LoginResponse
 import me.fitroh.londriforowner.data.response.ProfileResponse
-import me.fitroh.londriforowner.data.response.ProfileResult
+import me.fitroh.londriforowner.data.response.RegisterResponse
 import me.fitroh.londriforowner.models.UserModel
 import me.fitroh.londriforowner.pref.UserPreference
 import retrofit2.HttpException
@@ -20,6 +19,9 @@ class UserRepository private constructor(
     private val userPreference: UserPreference,
     private val apiService: ApiService
 ) {
+    private val _registerResponse = MutableLiveData<RegisterResponse>()
+    val registerResponse: LiveData<RegisterResponse> = _registerResponse
+
     private val _loginResponse = MutableLiveData<LoginResponse>()
     val loginResponse: LiveData<LoginResponse> = _loginResponse
 
@@ -43,6 +45,29 @@ class UserRepository private constructor(
 
     suspend fun login() {
         userPreference.login()
+    }
+
+    suspend fun postRegister(
+        telp: String,
+        name: String,
+        email: String,
+        password: String,
+        lat: String,
+        long: String,
+        alamat: String,
+    ) {
+        _isLoading.value = true
+        try {
+            val successResponse =
+                apiService.register(telp, name, email, password, lat, long, alamat)
+            _registerResponse.value = successResponse
+            _isLoading.value = false
+        } catch (e: HttpException) {
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorResponse = Gson().fromJson(errorBody, RegisterResponse::class.java)
+            Log.e("Error", errorResponse.toString())
+            _registerResponse.value = errorResponse
+        }
     }
 
     suspend fun postLogin(email: String, password: String) {
