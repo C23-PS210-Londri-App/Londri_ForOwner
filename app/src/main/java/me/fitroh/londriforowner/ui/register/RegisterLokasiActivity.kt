@@ -22,7 +22,6 @@ import me.fitroh.londriforowner.R
 import me.fitroh.londriforowner.databinding.ActivityRegisterLokasiBinding
 import java.util.Locale
 
-@Suppress("DEPRECATION")
 class RegisterLokasiActivity : AppCompatActivity(), OnMapReadyCallback,
     GoogleMap.OnMapClickListener {
 
@@ -38,6 +37,7 @@ class RegisterLokasiActivity : AppCompatActivity(), OnMapReadyCallback,
 
         binding = ActivityRegisterLokasiBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.btnNext.isEnabled = false
 
         supportActionBar?.hide()
         val keyEmail = intent.getStringExtra("email")
@@ -69,7 +69,6 @@ class RegisterLokasiActivity : AppCompatActivity(), OnMapReadyCallback,
         }
     }
 
-    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         if (doubleBackToExit) {
             super.onBackPressed()
@@ -77,6 +76,7 @@ class RegisterLokasiActivity : AppCompatActivity(), OnMapReadyCallback,
         }
         this.doubleBackToExit = true
         Toast.makeText(this, "Tekan sekali lagi untuk keluar", Toast.LENGTH_SHORT).show()
+        finish()
 
         android.os.Handler().postDelayed(
             { doubleBackToExit = false },
@@ -166,6 +166,7 @@ class RegisterLokasiActivity : AppCompatActivity(), OnMapReadyCallback,
         val geocode = Geocoder(context, Locale.getDefault())
         val listAddress = geocode.getFromLocation(lat, long, 1)
         val currentAddress = listAddress?.get(0)?.getAddressLine(0)
+        binding.btnNext.isEnabled = true
 
         return currentAddress ?: "Cannot access your address"
     }

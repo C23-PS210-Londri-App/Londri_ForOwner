@@ -51,6 +51,7 @@ class RegisterThreeActivity : AppCompatActivity() {
 
         supportActionBar?.hide()
 
+        binding.btnDaftar.isEnabled = false
         binding.imageStory.setOnClickListener {
             showOptionImage()
         }
@@ -115,6 +116,7 @@ class RegisterThreeActivity : AppCompatActivity() {
             Log.d("Image URI", "showImage: $it")
             binding.imageStory.setImageURI(it)
         }
+        binding.btnDaftar.isEnabled = true
     }
 
     private fun startCamera() {
