@@ -61,4 +61,7 @@
     <string name="close">Tutup</string>
     <string name="owner">Owner</string>
     <string name="logout">Logout</string>
+    <string name="konfirmasi_logout">Konfirmasi Logout</string>
+    <string name="desc_konfirmasi_logout">Apakah kamu yakin akan logout?</string>
+    <string name="terima_pesanan">Terima Pesanan</string>
 </resources>

@@ -124,29 +124,42 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvEmailLabel" />
 
-    <ImageView
-        android:id="@+id/ivLogout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingEnd="6dp"
-        android:paddingVertical="16dp"
-        android:src="@drawable/ic_logout"
-        app:layout_constraintBottom_toBottomOf="@+id/logout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/logout" />
 
-    <TextView
-        android:id="@+id/logout"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/btnLogout"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/logout"
-        android:layout_marginTop="4dp"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:paddingVertical="16dp"
-        android:clickable="true"
-        app:layout_constraintStart_toEndOf="@id/ivLogout"
-        app:layout_constraintTop_toBottomOf="@+id/tvEmail"
-        android:focusable="true" />
+        android:padding="6dp"
+        android:background="@color/red_700"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <ImageView
+            android:id="@+id/ivLogout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingEnd="6dp"
+            android:src="@drawable/ic_logout"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/logout"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="RtlSymmetry" />
+
+        <TextView
+            android:id="@+id/logout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/logout"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:clickable="true"
+            android:textColor="@color/white"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:focusable="true" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
