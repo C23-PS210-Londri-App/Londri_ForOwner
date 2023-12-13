@@ -2,22 +2,27 @@ package me.fitroh.londriforowner.ui.home
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import me.fitroh.londriforowner.R
 import me.fitroh.londriforowner.data.response.ResultOrderItem
 import me.fitroh.londriforowner.databinding.ItemOrderBinding
 import me.fitroh.londriforowner.ui.detail.OrderDetailActivity
 import me.fitroh.londriforowner.ui.detail.OrderDetailActivity.Companion.EXTRA_ID
 import java.text.SimpleDateFormat
 import java.util.TimeZone
+import kotlin.coroutines.coroutineContext
 
-class HomeAdapter (private val listOrderData: List<ResultOrderItem>) : RecyclerView.Adapter<HomeAdapter.ListViewHolder>(){
-    class ListViewHolder (private val homeBinding: ItemOrderBinding): RecyclerView.ViewHolder(homeBinding.root) {
+class HomeAdapter(private val listOrderData: List<ResultOrderItem>) :
+    RecyclerView.Adapter<HomeAdapter.ListViewHolder>() {
+    class ListViewHolder(private val homeBinding: ItemOrderBinding) :
+        RecyclerView.ViewHolder(homeBinding.root) {
 
         @SuppressLint("SetTextI18n", "SimpleDateFormat")
-        fun bind(data: ResultOrderItem){
+        fun bind(data: ResultOrderItem) {
             val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
             inputFormat.timeZone = TimeZone.getTimeZone("UTC")
             val outputFormat = SimpleDateFormat("dd MMMM yyyy")
@@ -30,6 +35,34 @@ class HomeAdapter (private val listOrderData: List<ResultOrderItem>) : RecyclerV
                 catatan.text = data.catatan
                 tvStatus.text = data.status
 
+//                val statusOrder = data.status
+//                val status = "Selesai"
+//
+//                if (statusOrder == "Menunggu Diterima") {
+//                    filler.setCardBackgroundColor(
+//                        ContextCompat.getColor(
+//                            itemView.context,
+//                            R.color.blue_400
+//                        )
+//                    )
+//                    Log.d("DebugColor", statusOrder)
+//                } else if (statusOrder == "Selesai") {
+//                    filler.setCardBackgroundColor(
+//                        ContextCompat.getColor(
+//                            itemView.context,
+//                            R.color.colorGreen
+//                        )
+//                    )
+//                    Log.d("DebugColor", statusOrder)
+//                }else{
+//                    filler.setCardBackgroundColor(
+//                        ContextCompat.getColor(
+//                            itemView.context,
+//                            R.color.colorYellow
+//                        )
+//                    )
+//                }
+
                 val parseDate = inputFormat.parse(data.tanggalOrder)
                 parseDate.let { outputFormat }
                 tglPesanan.text = parseDate?.let { outputFormat.format(it) }
@@ -41,13 +74,6 @@ class HomeAdapter (private val listOrderData: List<ResultOrderItem>) : RecyclerV
                 itemView.setOnClickListener {
                     val intent = Intent(itemView.context, OrderDetailActivity::class.java)
                     intent.putExtra(EXTRA_ID, data.orderTrx)
-                    intent.putExtra("extra_berat", data.estimasiBerat)
-                    intent.putExtra("extra_price", data.hargaTotal)
-                    intent.putExtra("extra_note", data.catatan)
-                    intent.putExtra("extra_status", data.status)
-                    intent.putExtra("extra_name", data.namaCustomer)
-                    intent.putExtra("extra_date", data.tanggalOrder)
-                    intent.putExtra("extra_address", data.alamatCustomer)
                     itemView.context.startActivity(intent)
                 }
             }
@@ -63,6 +89,7 @@ class HomeAdapter (private val listOrderData: List<ResultOrderItem>) : RecyclerV
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
         holder.bind(listOrderData[position])
     }
+
     override fun getItemCount(): Int = listOrderData.size
 
 }

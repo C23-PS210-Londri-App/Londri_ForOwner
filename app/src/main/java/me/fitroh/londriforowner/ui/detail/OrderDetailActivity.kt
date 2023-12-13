@@ -30,11 +30,6 @@ class OrderDetailActivity : AppCompatActivity() {
         orderId = intent.getStringExtra(EXTRA_ID).toString()
 
         getDetailOrder()
-        val spinner: AppCompatSpinner = binding.simpleSpinner
-
-        val serviceList = ServiceListProvider.list
-        val adapter = DropdownAdapter(this, serviceList)
-        spinner.adapter = adapter
 
     }
 
@@ -44,6 +39,11 @@ class OrderDetailActivity : AppCompatActivity() {
         inputFormat.timeZone = TimeZone.getTimeZone("UTC")
         val outputFormat = SimpleDateFormat("dd MMMM yyyy")
         val outputFormatTime = SimpleDateFormat("HH:mm")
+
+        val spinner: AppCompatSpinner = binding.simpleSpinner
+        val serviceList = ServiceListProvider.list
+        val adapter = DropdownAdapter(this, serviceList)
+        spinner.adapter = adapter
 
         viewModel.getSession().observe(this){user->
             user.token.let { token->
@@ -61,6 +61,13 @@ class OrderDetailActivity : AppCompatActivity() {
                 tvTotal.text = "${profile[0].estimasiBerat} Kg"
                 tvResi.text = orderId
                 tvService.text = profile[0].layanan
+
+                val selectedStatus = profile[0].status
+                val selectedItemIndex = serviceList.indexOfFirst { it.status == selectedStatus }
+
+                if (selectedItemIndex != -1) {
+                    spinner.setSelection(selectedItemIndex)
+                }
 
                 val parseDate = inputFormat.parse(profile[0].tanggalOrder)
                 parseDate.let { outputFormat }

@@ -12,11 +12,6 @@
         android:title="@string/title_service" />
 
     <item
-        android:id="@+id/navigation_history"
-        android:icon="@drawable/ic_history"
-        android:title="@string/title_history" />
-
-    <item
         android:id="@+id/navigation_profile"
         android:icon="@drawable/profile"
         android:title="@string/title_profile" />
