@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import me.fitroh.londriforowner.di.Injection
+import me.fitroh.londriforowner.ui.detail.DetailViewModel
 import me.fitroh.londriforowner.ui.home.HomeViewModel
 import me.fitroh.londriforowner.ui.login.LoginViewModel
 import me.fitroh.londriforowner.ui.profile.ProfileViewModel
@@ -26,6 +27,9 @@ class ViewModelFactory(private val repository: UserRepository) :
             }
             modelClass.isAssignableFrom(RegisterViewModel::class.java) -> {
                 RegisterViewModel(repository) as T
+            }
+            modelClass.isAssignableFrom(DetailViewModel::class.java) -> {
+                DetailViewModel(repository) as T
             }
             else -> throw IllegalArgumentException("Unknown viewModel class : " + modelClass.name)
         }

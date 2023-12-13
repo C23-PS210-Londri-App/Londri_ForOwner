@@ -41,7 +41,7 @@
     <string name="time">17.00</string>
     <string name="date">18-11-2023</string>
     <string name="orderDetail">Detail Pesanan</string>
-    <string name="catatan">Catatan</string>
+    <string name="catatan">Catatan*</string>
     <string name="orderStatus">Pesanan Selesai</string>
     <string name="cuci">Cuci</string>
     <string name="price">7000/kg</string>
@@ -64,4 +64,7 @@
     <string name="konfirmasi_logout">Konfirmasi Logout</string>
     <string name="desc_konfirmasi_logout">Apakah kamu yakin akan logout?</string>
     <string name="terima_pesanan">Terima Pesanan</string>
+    <string name="empty_order">Belum ada pesanan masuk</string>
+    <string name="status_pesanan">Status Pesanan</string>
+    <string name="jasa_layanan">Jasa Layanan</string>
 </resources>

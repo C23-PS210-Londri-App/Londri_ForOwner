@@ -59,12 +59,12 @@ class HomeFragment : Fragment() {
                     viewModel.listOrderItemNon.observe(viewLifecycleOwner){listData ->
 
                         if (listData.isNotEmpty()) {
-//                            binding.imageNotFound.visibility = View.GONE
-//                            binding.tvNotFound.visibility = View.GONE
+                            binding.ivEmptyOrder.visibility = View.GONE
+                            binding.textHome.visibility = View.GONE
                             binding.rvOrder.adapter = HomeAdapter(listData)
                         } else {
-//                            binding.imageNotFound.visibility = View.VISIBLE
-//                            binding.tvNotFound.visibility = View.VISIBLE
+                            binding.ivEmptyOrder.visibility = View.VISIBLE
+                            binding.textHome.visibility = View.VISIBLE
                             binding.rvOrder.adapter = null
                         }
                     }

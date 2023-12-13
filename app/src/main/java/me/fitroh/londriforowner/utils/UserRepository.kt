@@ -9,13 +9,16 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import me.fitroh.londriforowner.data.api.ApiService
+import me.fitroh.londriforowner.data.response.DetailResponse
 import me.fitroh.londriforowner.data.response.HomeResponse
 import me.fitroh.londriforowner.data.response.LoginResponse
 import me.fitroh.londriforowner.data.response.OrderResponse
 import me.fitroh.londriforowner.data.response.ProfileResponse
 import me.fitroh.londriforowner.data.response.ProfileResult
 import me.fitroh.londriforowner.data.response.RegisterResponse
+import me.fitroh.londriforowner.data.response.ResultOrder
 import me.fitroh.londriforowner.data.response.ResultOrderItem
+import me.fitroh.londriforowner.data.response.ResultProses
 import me.fitroh.londriforowner.models.UserModel
 import me.fitroh.londriforowner.pref.UserPreference
 import retrofit2.Call
@@ -35,6 +38,9 @@ class UserRepository private constructor(
 
     private val _profileResponse = MutableLiveData<List<ProfileResult>>()
     val profileResponse: LiveData<List<ProfileResult>> = _profileResponse
+
+    private val _orderDetailResponse = MutableLiveData<List<ResultOrder>>()
+    val orderDetailResponse: LiveData<List<ResultOrder>> = _orderDetailResponse
 
     private val _listOrderItem = MutableLiveData<List<ResultOrderItem>>()
     val listOrderItem: LiveData<List<ResultOrderItem>> = _listOrderItem
@@ -165,36 +171,34 @@ class UserRepository private constructor(
         })
     }
 
-//    fun postOrderStatus(token: String) {
-//        _isLoading.value = true
-//        val client = apiService.postStatusOrder(token)
-//
-//        client.enqueue(object : Callback<OrderResponse> {
-//            @SuppressLint("NullSafeMutableLiveData")
-//            override fun onResponse(
-//                call: Call<HomeResponse>,
-//                response: Response<HomeResponse>
-//            ) {
-//                _isLoading.value = false
-//                val listData = response.body()?.resultOrder
-//                if (response.isSuccessful) {
-//                    val lengthItem = listData?.size
-//                    if (lengthItem != null) {
-//                        _listOrderItem.value = listData
-//                    } else {
-//                        Log.e(TAG, "ErrorMessage: ${response.message()}")
-//                    }
-//                } else {
-//                    Log.e(TAG, "ErrorMessage: ${response.message()}")
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<HomeResponse>, t: Throwable) {
-//                _isLoading.value = false
-//                Log.e(TAG, "ErrorMessage: ${t.message.toString()}")
-//            }
-//        })
-//    }
+    fun getDetailOrder(token: String, orderTrx: String) {
+        val client = apiService.getDetailOrder(token, orderTrx)
+        client.enqueue(object : Callback<DetailResponse> {
+            @SuppressLint("SetTextI18n")
+            override fun onResponse(
+                call: Call<DetailResponse>,
+                response: Response<DetailResponse>
+            ) {
+                _isLoading.value = false
+                if (response.isSuccessful) {
+                    val orderDetail = response.body()?.resultOrder
+                    if (orderDetail != null) {
+                        _orderDetailResponse.value = listOf(orderDetail)
+                    } else {
+                        Log.e("Error", "onFailure: ${response.message()}")
+                    }
+                } else {
+                    _isLoading.value = false
+                    Log.e("DetailViewModel", "onFailure: ${response.message()}")
+                }
+            }
+
+            override fun onFailure(call: Call<DetailResponse>, t: Throwable) {
+                Log.e("DetailViewModel", "onFailure: ${t.message}")
+
+            }
+        })
+    }
 
     companion object {
         private const val TAG = "UserRepository"

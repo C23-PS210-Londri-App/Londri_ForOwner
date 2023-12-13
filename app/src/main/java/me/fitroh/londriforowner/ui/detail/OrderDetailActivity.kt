@@ -3,28 +3,21 @@ package me.fitroh.londriforowner.ui.detail
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.fragment.app.viewModels
-import me.fitroh.londriforowner.R
+import androidx.appcompat.widget.AppCompatSpinner
+import me.fitroh.londriforowner.data.dropdown.*
+import me.fitroh.londriforowner.data.dropdown.DropdownAdapter
 import me.fitroh.londriforowner.databinding.ActivityOrderDetailBinding
 import me.fitroh.londriforowner.models.ViewModelFactory
-import me.fitroh.londriforowner.ui.home.HomeViewModel
 import java.text.SimpleDateFormat
 import java.util.TimeZone
 
 class OrderDetailActivity : AppCompatActivity() {
     private lateinit var binding : ActivityOrderDetailBinding
     private lateinit var orderId: String
-    private lateinit var name: String
-    private var berat: Int? = 0
-    private var price: Int? = 0
-    private lateinit var note: String
-    private lateinit var status: String
-    private lateinit var date: String
-    private lateinit var address: String
 
-    private val viewModel by viewModels<HomeViewModel> {
+    private val viewModel by viewModels<DetailViewModel> {
         ViewModelFactory.getInstance(this)
     }
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,15 +28,14 @@ class OrderDetailActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
         orderId = intent.getStringExtra(EXTRA_ID).toString()
-        name = intent.getStringExtra("extra_name").toString()
-        berat = intent.getIntExtra("extra_berat", 0)
-        price = intent.getIntExtra("extra_price", 0)
-        note = intent.getStringExtra("extra_note").toString()
-        address = intent.getStringExtra("extra_address").toString()
-        status = intent.getStringExtra("extra_status").toString()
-        date = intent.getStringExtra("extra_date").toString()
 
         getDetailOrder()
+        val spinner: AppCompatSpinner = binding.simpleSpinner
+
+        val serviceList = ServiceListProvider.list
+        val adapter = DropdownAdapter(this, serviceList)
+        spinner.adapter = adapter
+
     }
 
     @SuppressLint("SetTextI18n")
@@ -53,36 +45,33 @@ class OrderDetailActivity : AppCompatActivity() {
         val outputFormat = SimpleDateFormat("dd MMMM yyyy")
         val outputFormatTime = SimpleDateFormat("HH:mm")
 
-        binding.apply {
-            tvName.text = name
-            tvAlamat.text = address
-            tvNote.text = note
-            tvPrice.text = "Rp $price"
-            tvTotal.text = "$berat Kg"
-            tvResi.text = orderId
-
-            val parseDate = inputFormat.parse(date)
-            parseDate.let { outputFormat }
-            tvOrderDate.text = parseDate?.let { outputFormat.format(it) }
-
-            val parseTime = inputFormat.parse(date)
-            parseTime.let { outputFormatTime }
-            tvTime.text = parseTime?.let { outputFormatTime.format(it) }
+        viewModel.getSession().observe(this){user->
+            user.token.let { token->
+                viewModel.getDetailOrder(token, orderId)
+                Log.d("DebugToken:" , token)
+            }
         }
-        if (status == "Menunggu Diterima"){
-            binding.btnProses.text = "Terima Pesanan"
-            status = "Diterima"
-        }else if(status == "Diterima"){
-            binding.btnProses.text = "Jemput Pesanan"
-        }else if(status == "Sedang Dijemput"){
-            binding.btnProses.text = "Proses Pesanan"
-        }else if(status == "Pesanan Sedang Diproses"){
-            binding.btnProses.text = "Antar Pesanan"
-        }else if(status == "Pesanan Sedang Diantar"){
-            binding.btnProses.text = "Selesaikan Pesanan"
-        }else{
-            binding.btnProses.isEnabled = true
+
+        viewModel.detailResponse.observe(this){profile->
+            binding.apply {
+                tvName.text = profile[0].namaCustomer
+                tvAlamat.text = profile[0].alamatCustomer
+                tvNote.text = profile[0].catatan
+                tvPrice.text = "Rp ${profile[0].hargaTotal}"
+                tvTotal.text = "${profile[0].estimasiBerat} Kg"
+                tvResi.text = orderId
+                tvService.text = profile[0].layanan
+
+                val parseDate = inputFormat.parse(profile[0].tanggalOrder)
+                parseDate.let { outputFormat }
+                tvOrderDate.text = parseDate?.let { outputFormat.format(it) }
+
+                val parseTime = inputFormat.parse(profile[0].tanggalOrder)
+                parseTime.let { outputFormatTime }
+                tvTime.text = parseTime?.let { outputFormatTime.format(it) }
+            }
         }
+
     }
 
     companion object {

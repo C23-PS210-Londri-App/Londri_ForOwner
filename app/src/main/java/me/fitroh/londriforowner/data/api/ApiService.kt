@@ -1,5 +1,6 @@
 package me.fitroh.londriforowner.data.api
 
+import me.fitroh.londriforowner.data.response.DetailResponse
 import me.fitroh.londriforowner.data.response.HomeResponse
 import me.fitroh.londriforowner.data.response.LoginResponse
 import me.fitroh.londriforowner.data.response.OrderResponse
@@ -14,6 +15,7 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Part
+import retrofit2.http.Path
 
 interface ApiService {
     @FormUrlEncoded
@@ -36,12 +38,26 @@ interface ApiService {
     ): LoginResponse
 
     @GET("admin/profile")
-    fun getProfile(@Header("Authorization") token: String): Call<ProfileResponse>
+    fun getProfile(
+        @Header("Authorization") token: String
+    )
+            : Call<ProfileResponse>
 
     @GET("admin/laundry/order")
-    fun getOrder(@Header("Authorization") token: String): Call<HomeResponse>
+    fun getOrder(
+        @Header("Authorization") token: String
+    )
+            : Call<HomeResponse>
 
     @FormUrlEncoded
     @POST("admin/laundry/order")
-    fun postStatusOrder(@Header("Authorization") token: String): Call<OrderResponse>
+    fun postStatusOrder(
+        @Header("Authorization") token: String
+    ): Call<OrderResponse>
+
+    @GET("admin/laundry/order/detail/{orderTrx}")
+    fun getDetailOrder(
+        @Header("Authorization") token: String,
+        @Path("orderTrx") orderTrx: String
+    ): Call<DetailResponse>
 }

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="CustomSpinnerDropdown" parent="Widget.AppCompat.Spinner.DropDown">
+        <item name="android:background">@drawable/popup_spinner</item>
+    </style>
+
+</resources>
