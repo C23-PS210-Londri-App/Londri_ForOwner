@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="18dp"
-    tools:context=".ui.history.HistoryFragment">
+    tools:context=".ui.service.ServiceFragment">
 
     <TextView
         android:id="@+id/tvEmpty"
@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:textAlignment="center"
         android:visibility="gone"
+        android:text="@string/empty_layanan"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -38,5 +39,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvService"
         tools:listitem="@layout/item_service" />
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/add_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:backgroundTint="@color/colorBlue"
+        android:text="Layanan"
+        android:textColor="@color/white"
+        app:icon="@drawable/ic_add"
+        app:iconTint="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

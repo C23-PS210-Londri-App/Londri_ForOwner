@@ -5,20 +5,19 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.withContext
 import me.fitroh.londriforowner.data.api.ApiService
+import me.fitroh.londriforowner.data.response.AllServiceResponse
 import me.fitroh.londriforowner.data.response.DetailResponse
 import me.fitroh.londriforowner.data.response.HomeResponse
 import me.fitroh.londriforowner.data.response.LoginResponse
-import me.fitroh.londriforowner.data.response.OrderResponse
 import me.fitroh.londriforowner.data.response.ProfileResponse
 import me.fitroh.londriforowner.data.response.ProfileResult
 import me.fitroh.londriforowner.data.response.RegisterResponse
+import me.fitroh.londriforowner.data.response.ResultAllLayananItem
 import me.fitroh.londriforowner.data.response.ResultOrder
 import me.fitroh.londriforowner.data.response.ResultOrderItem
-import me.fitroh.londriforowner.data.response.ResultProses
+import me.fitroh.londriforowner.data.response.UpdateOrderResponse
 import me.fitroh.londriforowner.models.UserModel
 import me.fitroh.londriforowner.pref.UserPreference
 import retrofit2.Call
@@ -44,6 +43,12 @@ class UserRepository private constructor(
 
     private val _listOrderItem = MutableLiveData<List<ResultOrderItem>>()
     val listOrderItem: LiveData<List<ResultOrderItem>> = _listOrderItem
+
+    private val _updateOrderResponse = MutableLiveData<UpdateOrderResponse>()
+    val updateOrderResponse: LiveData<UpdateOrderResponse> = _updateOrderResponse
+
+    private val _listLayananItem = MutableLiveData<List<ResultAllLayananItem>?>()
+    val listLayananItem: LiveData<List<ResultAllLayananItem>?> = _listLayananItem
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -140,6 +145,34 @@ class UserRepository private constructor(
         })
     }
 
+    fun getService(token: String) {
+        val client = apiService.getService(token)
+        client.enqueue(object : Callback<AllServiceResponse> {
+            @SuppressLint("SetTextI18n")
+            override fun onResponse(
+                call: Call<AllServiceResponse>,
+                response: Response<AllServiceResponse>
+            ) {
+                _isLoading.value = false
+                val listData = response.body()?.resultAllLayanan
+                if (response.isSuccessful) {
+                    val lengthItem = listData?.size
+                    if (lengthItem != null) {
+                        _listLayananItem.value = listData
+                    } else {
+                        Log.e(TAG, "ErrorMessage: ${response.message()}")
+                    }
+                } else {
+                    Log.e(TAG, "ErrorMessage: ${response.message()}")
+                }
+            }
+
+            override fun onFailure(call: Call<AllServiceResponse>, t: Throwable) {
+                Log.e("MainViewModel", "onFailure: ${t.message}")
+            }
+        })
+    }
+
     fun getOrder(token: String) {
         _isLoading.value = true
         val client = apiService.getOrder(token)
@@ -194,6 +227,34 @@ class UserRepository private constructor(
             }
 
             override fun onFailure(call: Call<DetailResponse>, t: Throwable) {
+                Log.e("DetailViewModel", "onFailure: ${t.message}")
+
+            }
+        })
+    }
+
+    fun updateOrder(token: String, orderTrx: String, status: String) {
+        val client = apiService.updateOrder(token, orderTrx, status)
+        client.enqueue(object : Callback<UpdateOrderResponse> {
+            @SuppressLint("SetTextI18n")
+            override fun onResponse(
+                call: Call<UpdateOrderResponse>,
+                response: Response<UpdateOrderResponse>
+            ) {
+                _isLoading.value = false
+                if (response.isSuccessful) {
+                    if (response.isSuccessful && response.body() != null) {
+                        _updateOrderResponse.value = response.body()
+                    } else {
+                        Log.e("Error", "onFailure: ${response.message()}")
+                    }
+                } else {
+                    _isLoading.value = false
+                    Log.e("DetailViewModel", "onFailure: ${response.message()}")
+                }
+            }
+
+            override fun onFailure(call: Call<UpdateOrderResponse>, t: Throwable) {
                 Log.e("DetailViewModel", "onFailure: ${t.message}")
 
             }

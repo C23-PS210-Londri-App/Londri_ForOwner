@@ -13,6 +13,7 @@ import me.fitroh.londriforowner.databinding.ItemOrderBinding
 import me.fitroh.londriforowner.ui.detail.OrderDetailActivity
 import me.fitroh.londriforowner.ui.detail.OrderDetailActivity.Companion.EXTRA_ID
 import java.text.SimpleDateFormat
+import java.util.Locale
 import java.util.TimeZone
 import kotlin.coroutines.coroutineContext
 
@@ -35,33 +36,36 @@ class HomeAdapter(private val listOrderData: List<ResultOrderItem>) :
                 catatan.text = data.catatan
                 tvStatus.text = data.status
 
-//                val statusOrder = data.status
-//                val status = "Selesai"
-//
-//                if (statusOrder == "Menunggu Diterima") {
-//                    filler.setCardBackgroundColor(
-//                        ContextCompat.getColor(
-//                            itemView.context,
-//                            R.color.blue_400
-//                        )
-//                    )
-//                    Log.d("DebugColor", statusOrder)
-//                } else if (statusOrder == "Selesai") {
-//                    filler.setCardBackgroundColor(
-//                        ContextCompat.getColor(
-//                            itemView.context,
-//                            R.color.colorGreen
-//                        )
-//                    )
-//                    Log.d("DebugColor", statusOrder)
-//                }else{
-//                    filler.setCardBackgroundColor(
-//                        ContextCompat.getColor(
-//                            itemView.context,
-//                            R.color.colorYellow
-//                        )
-//                    )
-//                }
+                val statusOrder = data.status.lowercase(Locale.ROOT)
+
+                when (statusOrder) {
+                    "menunggu diterima" -> {
+                        filler.setCardBackgroundColor(
+                            ContextCompat.getColor(
+                                itemView.context,
+                                R.color.colorBlue
+                            )
+                        )
+                        Log.d("DebugColor", statusOrder)
+                    }
+                    "selesai" -> {
+                        filler.setCardBackgroundColor(
+                            ContextCompat.getColor(
+                                itemView.context,
+                                R.color.colorGreen
+                            )
+                        )
+                        Log.d("DebugColor", statusOrder)
+                    }
+                    else -> {
+                        filler.setCardBackgroundColor(
+                            ContextCompat.getColor(
+                                itemView.context,
+                                R.color.colorYellow
+                            )
+                        )
+                    }
+                }
 
                 val parseDate = inputFormat.parse(data.tanggalOrder)
                 parseDate.let { outputFormat }

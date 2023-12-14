@@ -1,5 +1,6 @@
 package me.fitroh.londriforowner.data.api
 
+import me.fitroh.londriforowner.data.response.AllServiceResponse
 import me.fitroh.londriforowner.data.response.DetailResponse
 import me.fitroh.londriforowner.data.response.HomeResponse
 import me.fitroh.londriforowner.data.response.LoginResponse
@@ -7,6 +8,7 @@ import me.fitroh.londriforowner.data.response.OrderResponse
 import me.fitroh.londriforowner.data.response.ProfileResponse
 import me.fitroh.londriforowner.data.response.RegisterResponse
 import me.fitroh.londriforowner.data.response.ProfileResult
+import me.fitroh.londriforowner.data.response.UpdateOrderResponse
 import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.http.Field
@@ -40,14 +42,12 @@ interface ApiService {
     @GET("admin/profile")
     fun getProfile(
         @Header("Authorization") token: String
-    )
-            : Call<ProfileResponse>
+    ): Call<ProfileResponse>
 
     @GET("admin/laundry/order")
     fun getOrder(
         @Header("Authorization") token: String
-    )
-            : Call<HomeResponse>
+    ): Call<HomeResponse>
 
     @FormUrlEncoded
     @POST("admin/laundry/order")
@@ -60,4 +60,17 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Path("orderTrx") orderTrx: String
     ): Call<DetailResponse>
+
+    @FormUrlEncoded
+    @POST("admin/laundry/order/{orderTrx}")
+    fun updateOrder(
+        @Header("Authorization") token: String,
+        @Path("orderTrx") orderTrx: String,
+        @Field("status") status: String,
+    ): Call<UpdateOrderResponse>
+
+    @GET("admin/layanan")
+    fun getService(
+        @Header("Authorization") token: String
+    ): Call<AllServiceResponse>
 }

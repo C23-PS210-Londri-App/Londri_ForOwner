@@ -20,6 +20,7 @@
     <color name="purple_400">#5D5BEA</color>
     <color name="purple_500">#474484</color>
     <color name="red_700">#D32F2F</color>
-    <color name="colorYellow">#FFFF00</color>
-    <color name="colorGreen">#00FF00</color>
+    <color name="colorYellow">#FFB300</color>
+    <color name="colorGreen">#43A047</color>
+    <color name="colorBlue">#1E88E5</color>
 </resources>

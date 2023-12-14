@@ -9,6 +9,7 @@ import me.fitroh.londriforowner.ui.home.HomeViewModel
 import me.fitroh.londriforowner.ui.login.LoginViewModel
 import me.fitroh.londriforowner.ui.profile.ProfileViewModel
 import me.fitroh.londriforowner.ui.register.RegisterViewModel
+import me.fitroh.londriforowner.ui.service.ServiceViewModel
 import me.fitroh.londriforowner.utils.UserRepository
 
 class ViewModelFactory(private val repository: UserRepository) :
@@ -30,6 +31,9 @@ class ViewModelFactory(private val repository: UserRepository) :
             }
             modelClass.isAssignableFrom(DetailViewModel::class.java) -> {
                 DetailViewModel(repository) as T
+            }
+            modelClass.isAssignableFrom(ServiceViewModel::class.java) -> {
+                ServiceViewModel(repository) as T
             }
             else -> throw IllegalArgumentException("Unknown viewModel class : " + modelClass.name)
         }
