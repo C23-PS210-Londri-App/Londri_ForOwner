@@ -68,4 +68,10 @@
     <string name="status_pesanan">Status Pesanan</string>
     <string name="jasa_layanan">Jasa Layanan</string>
     <string name="empty_layanan">Anda belum memiliki layanan</string>
+    <string name="tersedia">Tersedia</string>
+    <string name="stat_null">Null</string>
+    <string name="tidak_tersedia">Tidak Tersedia</string>
+    <string name="edit_namalayanan">Nama Layanan</string>
+    <string name="edit_hargalayanan">Harga Layanan</string>
+    <string name="simpan">Simpan</string>
 </resources>

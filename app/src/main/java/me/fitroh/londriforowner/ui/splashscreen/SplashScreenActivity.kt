@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.activity.viewModels
-import me.fitroh.londriforowner.R
 import me.fitroh.londriforowner.databinding.ActivitySplashScreenBinding
 import me.fitroh.londriforowner.models.ViewModelFactory
 import me.fitroh.londriforowner.ui.HomeActivity
@@ -36,7 +35,7 @@ class SplashScreenActivity : AppCompatActivity() {
                 } else {
                     val token = user.token
                     val intent = Intent(this, HomeActivity::class.java)
-                    intent.putExtra("extra token", token)
+                    intent.putExtra("extra_token", token)
                     startActivity(intent)
                     finish()
                 }

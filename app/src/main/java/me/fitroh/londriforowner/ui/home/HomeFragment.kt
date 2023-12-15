@@ -68,12 +68,16 @@ class HomeFragment : Fragment() {
                             binding.rvOrder.adapter = null
                         }
                     }
-//                    viewModel.isLoading.observe(viewLifecycleOwner) { load ->
-//                        showLoading(load)
-//                    }
+                    viewModel.isLoading.observe(viewLifecycleOwner) { load ->
+                        showLoading(load)
+                    }
                 }
             }
         }
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
     private fun backToLogin() {

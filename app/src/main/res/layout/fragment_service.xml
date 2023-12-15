@@ -7,6 +7,27 @@
     android:padding="18dp"
     tools:context=".ui.service.ServiceFragment">
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/ivEmpty"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:src="@drawable/nodata"
+        android:contentDescription="@string/app_name" />
+
     <TextView
         android:id="@+id/tvEmpty"
         android:layout_width="match_parent"
@@ -15,20 +36,9 @@
         android:visibility="gone"
         android:text="@string/empty_layanan"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/tvService"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/layanan"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:textStyle="bold"
-        android:textSize="20sp" />
+        app:layout_constraintTop_toBottomOf="@id/ivEmpty" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvService"
@@ -37,7 +47,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvService"
+        app:layout_constraintTop_toTopOf="parent"
         tools:listitem="@layout/item_service" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
@@ -45,9 +55,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="8dp"
         android:backgroundTint="@color/colorBlue"
-        android:text="Layanan"
+        android:text="@string/title_service"
         android:textColor="@color/white"
         app:icon="@drawable/ic_add"
         app:iconTint="@color/white"

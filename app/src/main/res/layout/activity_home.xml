@@ -34,7 +34,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:track="@drawable/bg_track"
             android:thumb="@drawable/ic_thumb"
-            android:checked="true"
+            android:visibility="gone"
             android:textColor="@color/white"
             android:textOn="@string/open"
             android:textOff="@string/close"

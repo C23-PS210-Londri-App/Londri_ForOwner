@@ -1,5 +1,6 @@
 package me.fitroh.londriforowner.data.api
 
+import me.fitroh.londriforowner.data.response.AddServiceResponse
 import me.fitroh.londriforowner.data.response.AllServiceResponse
 import me.fitroh.londriforowner.data.response.DetailResponse
 import me.fitroh.londriforowner.data.response.HomeResponse
@@ -8,7 +9,10 @@ import me.fitroh.londriforowner.data.response.OrderResponse
 import me.fitroh.londriforowner.data.response.ProfileResponse
 import me.fitroh.londriforowner.data.response.RegisterResponse
 import me.fitroh.londriforowner.data.response.ProfileResult
+import me.fitroh.londriforowner.data.response.UpdateInfoServiceResponse
 import me.fitroh.londriforowner.data.response.UpdateOrderResponse
+import me.fitroh.londriforowner.data.response.UpdateStatusLaundryResponse
+import me.fitroh.londriforowner.data.response.UpdateStatusServiceResponse
 import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.http.Field
@@ -49,12 +53,6 @@ interface ApiService {
         @Header("Authorization") token: String
     ): Call<HomeResponse>
 
-    @FormUrlEncoded
-    @POST("admin/laundry/order")
-    fun postStatusOrder(
-        @Header("Authorization") token: String
-    ): Call<OrderResponse>
-
     @GET("admin/laundry/order/detail/{orderTrx}")
     fun getDetailOrder(
         @Header("Authorization") token: String,
@@ -73,4 +71,36 @@ interface ApiService {
     fun getService(
         @Header("Authorization") token: String
     ): Call<AllServiceResponse>
+
+    @FormUrlEncoded
+    @POST("admin/status/laundry")
+    fun updateStatusLaundry(
+        @Header("Authorization") token: String,
+        @Field("status") status: String,
+    ): Call<UpdateStatusLaundryResponse>
+
+    @FormUrlEncoded
+    @POST("admin/status/layanan/{serviceId}")
+    fun updateStatusService(
+        @Header("Authorization") token: String,
+        @Field("status") status: String,
+        @Path("serviceId") serviceId: String,
+    ): Call<UpdateStatusServiceResponse>
+
+    @FormUrlEncoded
+    @POST("admin/layanan/create")
+    fun addLayanan(
+        @Header("Authorization") token: String,
+        @Field("nama_layanan") nama_layanan: String,
+        @Field("harga_layanan") harga_layanan: String,
+    ): Call<AddServiceResponse>
+
+    @FormUrlEncoded
+    @POST("admin/layanan/edit/{serviceId}")
+    fun updateLayanan(
+        @Header("Authorization") token: String,
+        @Path("serviceId") serviceId: String,
+        @Field("nama_layanan") nama_layanan: String,
+        @Field("harga_layanan") harga_layanan: String,
+    ): Call<UpdateInfoServiceResponse>
 }

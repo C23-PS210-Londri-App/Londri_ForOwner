@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
 import me.fitroh.londriforowner.data.api.ApiService
+import me.fitroh.londriforowner.data.response.AddServiceResponse
 import me.fitroh.londriforowner.data.response.AllServiceResponse
 import me.fitroh.londriforowner.data.response.DetailResponse
 import me.fitroh.londriforowner.data.response.HomeResponse
@@ -17,7 +18,10 @@ import me.fitroh.londriforowner.data.response.RegisterResponse
 import me.fitroh.londriforowner.data.response.ResultAllLayananItem
 import me.fitroh.londriforowner.data.response.ResultOrder
 import me.fitroh.londriforowner.data.response.ResultOrderItem
+import me.fitroh.londriforowner.data.response.UpdateInfoServiceResponse
 import me.fitroh.londriforowner.data.response.UpdateOrderResponse
+import me.fitroh.londriforowner.data.response.UpdateStatusLaundryResponse
+import me.fitroh.londriforowner.data.response.UpdateStatusServiceResponse
 import me.fitroh.londriforowner.models.UserModel
 import me.fitroh.londriforowner.pref.UserPreference
 import retrofit2.Call
@@ -49,6 +53,21 @@ class UserRepository private constructor(
 
     private val _listLayananItem = MutableLiveData<List<ResultAllLayananItem>?>()
     val listLayananItem: LiveData<List<ResultAllLayananItem>?> = _listLayananItem
+
+    private val _updateStatusLaundryResponse = MutableLiveData<UpdateStatusLaundryResponse>()
+    val updateStatusLaundryResponse: LiveData<UpdateStatusLaundryResponse> = _updateStatusLaundryResponse
+
+    private val _statusLaundryResponse = MutableLiveData<String?>()
+    val statusLaundryResponse: MutableLiveData<String?> = _statusLaundryResponse
+
+    private val _statusServiceResponse = MutableLiveData<String?>()
+    val statusServiceResponse: MutableLiveData<String?> = _statusServiceResponse
+
+    private val _addLayananResponse = MutableLiveData<String?>()
+    val addLayananResponse: MutableLiveData<String?> = _addLayananResponse
+
+    private val _updateInfoLayananResponse = MutableLiveData<String?>()
+    val updateInfoLayananResponse: MutableLiveData<String?> = _updateInfoLayananResponse
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -233,6 +252,34 @@ class UserRepository private constructor(
         })
     }
 
+    fun getStatus(token: String) {
+        val client = apiService.getProfile(token)
+        client.enqueue(object : Callback<ProfileResponse> {
+            @SuppressLint("SetTextI18n")
+            override fun onResponse(
+                call: Call<ProfileResponse>,
+                response: Response<ProfileResponse>
+            ) {
+                _isLoading.value = false
+                if (response.isSuccessful) {
+                    val statusLaundry = response.body()?.response?.status
+                    if (statusLaundry != null) {
+                        _statusLaundryResponse.value = statusLaundry
+                    } else {
+                        Log.e("Error", "onFailure: ${response.message()}")
+                    }
+                } else {
+                    _isLoading.value = false
+                    Log.e("MainViewModel", "onFailure: ${response.message()}")
+                }
+            }
+
+            override fun onFailure(call: Call<ProfileResponse>, t: Throwable) {
+                Log.e("MainViewModel", "onFailure: ${t.message}")
+            }
+        })
+    }
+
     fun updateOrder(token: String, orderTrx: String, status: String) {
         val client = apiService.updateOrder(token, orderTrx, status)
         client.enqueue(object : Callback<UpdateOrderResponse> {
@@ -243,8 +290,37 @@ class UserRepository private constructor(
             ) {
                 _isLoading.value = false
                 if (response.isSuccessful) {
+                    val statusService = response.body()?.message
+                    if (statusService != null) {
+                        _statusServiceResponse.value = statusService
+                    } else {
+                        Log.e("Error", "onFailure: ${response.message()}")
+                    }
+                } else {
+                    _isLoading.value = false
+                    Log.e("MainViewModel", "onFailure: ${response.message()}")
+                }
+            }
+
+            override fun onFailure(call: Call<UpdateOrderResponse>, t: Throwable) {
+                Log.e("DetailViewModel", "onFailure: ${t.message}")
+
+            }
+        })
+    }
+
+    fun updateStatusLaundry(token: String, status: String) {
+        val client = apiService.updateStatusLaundry(token, status)
+        client.enqueue(object : Callback<UpdateStatusLaundryResponse> {
+            @SuppressLint("SetTextI18n")
+            override fun onResponse(
+                call: Call<UpdateStatusLaundryResponse>,
+                response: Response<UpdateStatusLaundryResponse>
+            ) {
+                _isLoading.value = false
+                if (response.isSuccessful) {
                     if (response.isSuccessful && response.body() != null) {
-                        _updateOrderResponse.value = response.body()
+                        _updateStatusLaundryResponse.value = response.body()
                     } else {
                         Log.e("Error", "onFailure: ${response.message()}")
                     }
@@ -254,7 +330,95 @@ class UserRepository private constructor(
                 }
             }
 
-            override fun onFailure(call: Call<UpdateOrderResponse>, t: Throwable) {
+            override fun onFailure(call: Call<UpdateStatusLaundryResponse>, t: Throwable) {
+                Log.e("DetailViewModel", "onFailure: ${t.message}")
+
+            }
+        })
+    }
+
+    fun updateStatusService(token: String, status: String, serviceId: String) {
+        val client = apiService.updateStatusService(token, status, serviceId)
+        client.enqueue(object : Callback<UpdateStatusServiceResponse> {
+            @SuppressLint("SetTextI18n")
+            override fun onResponse(
+                call: Call<UpdateStatusServiceResponse>,
+                response: Response<UpdateStatusServiceResponse>
+            ) {
+                _isLoading.value = false
+                if (response.isSuccessful) {
+                    val statusService = response.body()?.message
+                    if (statusService != null) {
+                        _statusServiceResponse.value = statusService
+                    } else {
+                        Log.e("Error", "onFailure: ${response.message()}")
+                    }
+                } else {
+                    _isLoading.value = false
+                    Log.e("MainViewModel", "onFailure: ${response.message()}")
+                }
+            }
+
+            override fun onFailure(call: Call<UpdateStatusServiceResponse>, t: Throwable) {
+                Log.e("DetailViewModel", "onFailure: ${t.message}")
+
+            }
+        })
+    }
+
+    fun addInformasiService(token: String, namaLayanan: String, harga: String) {
+        val client = apiService.addLayanan(token, namaLayanan, harga)
+        client.enqueue(object : Callback<AddServiceResponse> {
+            @SuppressLint("SetTextI18n")
+            override fun onResponse(
+                call: Call<AddServiceResponse>,
+                response: Response<AddServiceResponse>
+            ) {
+                _isLoading.value = false
+                if (response.isSuccessful) {
+                    val addService = response.body()?.message
+                    if (addService != null) {
+                        _addLayananResponse.value = addService
+                    } else {
+                        Log.e("Error", "onFailure: ${response.message()}")
+                    }
+                } else {
+                    _isLoading.value = false
+                    Log.e("MainViewModel", "onFailure: ${response.message()}")
+                }
+            }
+
+            override fun onFailure(call: Call<AddServiceResponse>, t: Throwable) {
+                Log.e("DetailViewModel", "onFailure: ${t.message}")
+
+            }
+        })
+    }
+
+
+    fun updateInfoService(token: String, serviceId: String, namaLayanan: String, harga: String) {
+        val client = apiService.updateLayanan(token,serviceId, namaLayanan, harga)
+        client.enqueue(object : Callback<UpdateInfoServiceResponse> {
+            @SuppressLint("SetTextI18n")
+            override fun onResponse(
+                call: Call<UpdateInfoServiceResponse>,
+                response: Response<UpdateInfoServiceResponse>
+            ) {
+                _isLoading.value = false
+                if (response.isSuccessful) {
+                    val updateService = response.body()?.message
+                    if (updateService != null) {
+                        _updateInfoLayananResponse.value = updateService
+                    } else {
+                        Log.e("Error", "onFailure: ${response.message()}")
+                    }
+                } else {
+                    _isLoading.value = false
+                    Log.e("MainViewModel", "onFailure: ${response.message()}")
+                }
+            }
+
+            override fun onFailure(call: Call<UpdateInfoServiceResponse>, t: Throwable) {
                 Log.e("DetailViewModel", "onFailure: ${t.message}")
 
             }
