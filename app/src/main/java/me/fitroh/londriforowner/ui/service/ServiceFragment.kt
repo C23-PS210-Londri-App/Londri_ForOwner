@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.yagmurerdogan.toasticlib.Toastic
 import me.fitroh.londriforowner.databinding.FragmentServiceBinding
 import me.fitroh.londriforowner.models.ViewModelFactory
 import me.fitroh.londriforowner.ui.login.LoginActivity
@@ -38,6 +39,11 @@ class ServiceFragment : Fragment() {
         binding.addFab.setOnClickListener {
             val bottomSheetFragment = ServiceAddFragment()
             bottomSheetFragment.show(childFragmentManager, bottomSheetFragment.tag)
+
+            // Set callback untuk mereload data setelah layanan ditambahkan
+            bottomSheetFragment.setOnDataAddedListener {
+                reloadData()
+            }
         }
     }
 
@@ -76,6 +82,11 @@ class ServiceFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun reloadData() {
+        // Reload data setelah layanan ditambahkan
+        loadData()
     }
 
     private fun showLoading(isLoading: Boolean) {

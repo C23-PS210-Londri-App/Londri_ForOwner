@@ -118,6 +118,7 @@ class LoginActivity : AppCompatActivity() {
                 finish()
             } else {
                 showToast(response.message.toString())
+                binding.progressBar.visibility = View.GONE
             }
         }
     }

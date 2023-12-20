@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textfield.TextInputEditText
+import com.yagmurerdogan.toasticlib.Toastic
 import me.fitroh.londriforowner.R
 import me.fitroh.londriforowner.data.response.ResultAllLayananItem
 import me.fitroh.londriforowner.databinding.ItemServiceBinding
@@ -18,6 +19,9 @@ class ServiceAdapter(
     private val tokenAuth: String,
 ) :
     RecyclerView.Adapter<ServiceAdapter.ListViewHolder>() {
+
+    private lateinit var recyclerView: RecyclerView
+
     inner class ListViewHolder(private val binding: ItemServiceBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
@@ -43,10 +47,10 @@ class ServiceAdapter(
                     val status = if (data.status == "Tersedia") "Tidak Tersedia" else "Tersedia"
 
                     Log.d("PostStatus", status)
-                    if(status == "Tersedia"){
+                    if (status == "Tersedia") {
                         statsLayanan.setBackgroundResource(R.color.colorGreen)
                         tvStatsLayanan.setText(R.string.tersedia)
-                    }else{
+                    } else {
                         statsLayanan.setBackgroundResource(R.color.black_300)
                         tvStatsLayanan.setText(R.string.tidak_tersedia)
                     }
@@ -56,7 +60,7 @@ class ServiceAdapter(
 
                 itemView.setOnClickListener {
                     // Alert Dialog Here
-                    showUpdateLayanan(serviceId ,namaLayanan, hargaLayanan)
+                    showUpdateLayanan(serviceId, namaLayanan, hargaLayanan)
                 }
             }
         }
@@ -81,6 +85,9 @@ class ServiceAdapter(
                 Log.e("PopUp", "$namaLayanan, $hargaLayanan")
                 updateInfoToApi(tokenAuth, serviceId.toString(), namaLayanan.text.toString(), hargaLayanan.text.toString())
                 dialog.dismiss()
+
+                // Tampilkan Toast
+                showToast()
             }
         }
 
@@ -90,6 +97,9 @@ class ServiceAdapter(
                 viewModel.updateInfoService(token, serviceId, nama, harga)
             }
             notifyDataSetChanged()
+            recyclerView.postDelayed({
+                viewModel.getService(token)
+            }, 100)
         }
 
         @SuppressLint("NotifyDataSetChanged")
@@ -98,13 +108,27 @@ class ServiceAdapter(
                 viewModel.updateStatusService(token, status, serviceId)
             }
             notifyDataSetChanged()
+            recyclerView.postDelayed({
+                viewModel.getService(token)
+            }, 100)
         }
 
+        private fun showToast() {
+            // Show notification
+            Toastic.toastic(
+                context = itemView.context,
+                message = "Layanan berhasil diperbarui",
+                duration = Toastic.LENGTH_SHORT,
+                type = Toastic.SUCCESS,
+                isIconAnimated = true
+            ).show()
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
         val binding =
             ItemServiceBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        recyclerView = parent as RecyclerView
         return ListViewHolder(binding)
     }
 
@@ -113,6 +137,4 @@ class ServiceAdapter(
     }
 
     override fun getItemCount(): Int = listServiceData.size
-
-
 }

@@ -1,10 +1,10 @@
 package me.fitroh.londriforowner.ui
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.activity.viewModels
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
@@ -12,10 +12,12 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.yagmurerdogan.toasticlib.Toastic
 import me.fitroh.londriforowner.R
 import me.fitroh.londriforowner.databinding.ActivityHomeBinding
 import me.fitroh.londriforowner.models.ViewModelFactory
 import me.fitroh.londriforowner.ui.home.HomeViewModel
+import me.fitroh.londriforowner.ui.login.LoginActivity
 
 class HomeActivity : AppCompatActivity() {
 
@@ -71,10 +73,18 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun getStatusLaundriAPI(token: String) {
+
+        Log.d("DebugToken:", "getStatusLaundriAPI: $token")
+        if(token.isEmpty()){
+            viewModel.logout()
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+        }
+
         viewModel.getStatus(token)
 
         viewModel.statusLaundryResponse.observe(this) {status ->
-
+            Log.d("DebugHomeStatus", "$status")
             // Jika status Open, maka tulisan tombol yg terlihat adalah Buka
             binding.swOnOff.isChecked = (status != "Open")
 
@@ -101,6 +111,12 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun showToast(message: String?) {
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+        Toastic.toastic(
+            context = this,
+            message = "$message",
+            duration = Toastic.LENGTH_SHORT,
+            type = Toastic.ERROR,
+            isIconAnimated = true
+        ).show()
     }
 }

@@ -13,6 +13,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.yagmurerdogan.toasticlib.Toastic
 import me.fitroh.londriforowner.R
 import me.fitroh.londriforowner.databinding.FragmentServiceAddBinding
 import me.fitroh.londriforowner.models.ViewModelFactory
@@ -26,6 +27,12 @@ class ServiceAddFragment : BottomSheetDialogFragment() {
     }
     private var isViewCreated = false
     private var token: String? = null
+
+    private var onDataAddedListener: (() -> Unit)? = null
+
+    fun setOnDataAddedListener(listener: () -> Unit) {
+        onDataAddedListener = listener
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -128,8 +135,19 @@ class ServiceAddFragment : BottomSheetDialogFragment() {
         }
 
         viewModel.addLayananResponse.observe(this) { response ->
-            Log.e("ADD:", "actionSimpan: $response")
             dismiss()
+
+            // Panggil callback ketika data berhasil ditambahkan
+            onDataAddedListener?.invoke()
+
+            // Show notification
+            Toastic.toastic(
+                context = requireContext(),
+                message = "$response",
+                duration = Toastic.LENGTH_SHORT,
+                type = Toastic.SUCCESS,
+                isIconAnimated = true
+            ).show()
         }
     }
 

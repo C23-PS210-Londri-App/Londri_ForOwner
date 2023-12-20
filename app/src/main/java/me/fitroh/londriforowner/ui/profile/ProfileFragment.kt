@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
+import com.yagmurerdogan.toasticlib.Toastic
 import me.fitroh.londriforowner.R
 import me.fitroh.londriforowner.databinding.FragmentProfileBinding
 import me.fitroh.londriforowner.models.ViewModelFactory
@@ -52,6 +53,7 @@ class ProfileFragment : Fragment() {
                 Glide
                     .with(this@ProfileFragment)
                     .load(profile[0].fotoLaundry)
+                    .placeholder(R.drawable.placeholder_laundry)
                     .centerCrop()
                     .into(ivProfile)
             }
@@ -67,6 +69,7 @@ class ProfileFragment : Fragment() {
             .setPositiveButton("Yes") { dialog, _ ->
                 viewModel.logout()
                 dialog.dismiss()
+                showToast()
                 redirectToLoginActivity()
             }
             .setNegativeButton("No") { dialog, _ ->
@@ -74,6 +77,16 @@ class ProfileFragment : Fragment() {
             }
         val dialog = builder.create()
         dialog.show()
+    }
+
+    private fun showToast() {
+        Toastic.toastic(
+            context = requireContext(),
+            message = "Prose logout berhasil",
+            duration = Toastic.LENGTH_SHORT,
+            type = Toastic.SUCCESS,
+            isIconAnimated = true
+        ).show()
     }
 
     private fun redirectToLoginActivity() {

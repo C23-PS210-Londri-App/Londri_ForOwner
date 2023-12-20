@@ -29,16 +29,24 @@ class SplashScreenActivity : AppCompatActivity() {
 
         Handler(Looper.getMainLooper()).postDelayed({
             viewModel.getSession().observe(this) { user ->
-                if (!user.isLogin) {
+                if(user.token == "Bearer null"){
+                    viewModel.logout()
                     startActivity(Intent(this, LoginActivity::class.java))
                     finish()
-                } else {
-                    val token = user.token
-                    val intent = Intent(this, HomeActivity::class.java)
-                    intent.putExtra("extra_token", token)
-                    startActivity(intent)
-                    finish()
+                }else{
+                    if (!user.isLogin) {
+                        startActivity(Intent(this, LoginActivity::class.java))
+                        finish()
+                    } else {
+                        val token = user.token
+                        val intent = Intent(this, HomeActivity::class.java)
+                        intent.putExtra("extra_token", token)
+                        startActivity(intent)
+                        finish()
+                    }
                 }
+
+
             }
 
         }, 3000)

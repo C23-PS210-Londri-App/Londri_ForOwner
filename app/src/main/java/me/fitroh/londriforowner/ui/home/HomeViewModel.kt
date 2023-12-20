@@ -38,5 +38,11 @@ class HomeViewModel(private val repository: UserRepository) : ViewModel() {
             repository.updateStatusLaundry(token, status)
         }
     }
+
+    fun logout() {
+        viewModelScope.launch {
+            repository.logout()
+        }
+    }
 }
 
