@@ -16,6 +16,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        val baseUrls = "\"https://londri.et.r.appspot.com/\""
         val baseUrl = "\"https://londri.up.railway.app/api/v1/\""
         buildConfigField("String", "API_KEY", baseUrl)
     }
